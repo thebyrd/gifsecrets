@@ -1,4 +1,4 @@
-package main
+package gifsecrets
 
 import (
 	"testing"
@@ -17,7 +17,7 @@ func TestGifSecrets(t *testing.T) {
 	}
 
 	// intentionally weird behavior until I learn regex
-	if secret != "\""+TestSecret+"\"" {
+	if secret != TestSecret {
 		t.Errorf("Decoded secret was %s instead of %s", secret, TestSecret)
 	}
 }
