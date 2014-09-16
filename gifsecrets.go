@@ -1,9 +1,8 @@
-package main
+package gifsecrets
 
 import (
 	"bufio"
 	"code.google.com/p/go-uuid/uuid"
-	"fmt"
 	"io"
 	"os"
 	"os/exec"
@@ -49,5 +48,6 @@ func Decode(path string) (string, error) {
 	}
 
 	reg := regexp.MustCompile("\"(.*?)\"") // this captures everything in between quotes which is pretty ghetto
-	return string(reg.Find(out)), nil
+	raw := reg.Find(out)
+	return string(raw[1:len(raw)-1]), nil
 }

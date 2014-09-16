@@ -1,0 +1,59 @@
+<!doctype html>
+<html>
+<head>
+  <style>
+    .dropzone {
+      height: 500px;
+      width: 500px;
+      background: rgb(245, 245, 245);
+    }
+  </style>
+</head>
+<body>
+  <h1>$Hello World$</h1>
+  <div class="dropzone">
+
+  </div>
+  <script>
+    // Polyfill
+    XMLHttpRequest.prototype.sendAsBinary = function(text){
+      var data = new ArrayBuffer(text.length);
+      var ui8a = new Uint8Array(data, 0);
+      for (var i = 0; i < text.length; i++) ui8a[i] = (text.charCodeAt(i) & 0xff);
+      this.send(ui8a);
+    }
+
+    // drag & drop upload
+    var zone = document.querySelector('.dropzone')
+    zone.addEventListener('dragenter', function (e) {
+      e.stopPropagation()
+      e.preventDefault()
+    })
+    zone.addEventListener('dragover', function (e) {
+      e.stopPropagation()
+      e.preventDefault()
+    })
+    zone.addEventListener('drop', function (e) {
+      e.preventDefault()
+      var file = e.dataTransfer.files[0];
+      if (file.type != "image/gif") {
+        return alert("File must be a gif, not " + file.type)
+      }
+      console.log(file, '$$$$$')
+      var xhr = new XMLHttpRequest()
+      xhr.onload = function () {
+        var response = JSON.parse(this.responseText)
+        console.log('response', response)
+      }
+      xhr.open("POST", "/secret")
+
+      var reader = new FileReader();
+      reader.onload = function (evt) {
+        xhr.sendAsBinary(evt.target.result)
+      }
+      reader.readAsBinaryString(file)
+    })
+
+  </script>
+</body>
+</html>
